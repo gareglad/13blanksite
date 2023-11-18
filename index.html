@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pixel Puzzler</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!-- Option 1: Include in HTML -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.2.2/font/bootstrap-icons.css">
+  <style>
+    /* Style your game elements here */
+
+/* Example styles for the puzzle pieces */
+body{
+    height: 100vh;
+    background: #ffc107;
+}
+.puzzle-container {
+  display: grid;
+  grid-template-columns: repeat(4, 50px);
+  grid-template-rows: repeat(4, 50px);
+  gap: 5px;
+}
+
+.puzzle-piece {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #000;
+  display: inline;
+}
+.puzzle-row {
+    display: grid;
+}
+.puzzle-row.match_key_solution {
+    display: flex;
+    margin-left: -3px;
+    margin-bottom: 25px;
+}
+.match_key_solution .puzzle-piece {
+    margin-left: 3px;
+}
+/* Additional styling as needed */
+.card {
+    display: inline-block;
+}
+  </style>
+  
+</head>
+<body class="d-flex d-flex justify-content-center align-items-center align-self-center">
+    <div class="card">
+        <div class="card-header">
+            Pixel Puzzler
+        </div>
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <p class="card-text">
+            <div class="game-container">
+                <div class="puzzle-row match_key_solution">
+                    <div class="puzzle-piece" data-row="1" data-col="1" data-color="red" data-order="0"></div>
+                    <div class="puzzle-piece" data-row="1" data-col="2" data-color="blue" data-order="1"></div>
+                    <div class="puzzle-piece" data-row="1" data-col="3" data-color="red" data-order="2"></div>
+                    <div class="puzzle-piece" data-row="1" data-col="4" data-color="blue" data-order="3"></div>
+                </div>
+                <div class="puzzle-container">
+                  <div class="puzzle-row">
+                    <div class="puzzle-piece" data-row="1" data-col="1" data-color="red"></div>
+                    <div class="puzzle-piece" data-row="1" data-col="2" data-color="blue"></div>
+                    <div class="puzzle-piece" data-row="1" data-col="3" data-color="red"></div>
+                    <div class="puzzle-piece" data-row="1" data-col="4" data-color="blue"></div>
+                </div>
+                <div class="puzzle-row">
+                    <div class="puzzle-piece" data-row="2" data-col="1" data-color="red"></div>
+                    <div class="puzzle-piece" data-row="2" data-col="2" data-color="blue"></div>
+                    <div class="puzzle-piece" data-row="2" data-col="3" data-color="red"></div>
+                    <div class="puzzle-piece" data-row="2" data-col="4" data-color="blue"></div>
+                </div>
+                <div class="puzzle-row">
+                    <div class="puzzle-piece" data-row="3" data-col="1" data-color="red"></div>
+                    <div class="puzzle-piece" data-row="3" data-col="2" data-color="blue"></div>
+                    <div class="puzzle-piece" data-row="3" data-col="3" data-color="red"></div>
+                    <div class="puzzle-piece" data-row="3" data-col="4" data-color="blue"></div>
+                </div>
+                <div class="puzzle-row">
+                    <div class="puzzle-piece" data-row="4" data-col="1" data-color="red"></div>
+                    <div class="puzzle-piece" data-row="4" data-col="2" data-color="blue"></div>
+                    <div class="puzzle-piece" data-row="4" data-col="3" data-color="red"></div>
+                    <div class="puzzle-piece" data-row="4" data-col="4" data-color="blue"></div>
+                    <!-- Add more puzzle pieces here -->
+                  </div>
+                  <!-- Add more puzzle rows here -->
+                </div>
+                
+              </div>
+          </p>
+          <button id="checkButton"  class="btn btn-primary">Check Solution</button>
+                <button class="new_board btn btn-primary">New Board</button>
+                <div id="result"></div>
+          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+        </div>
+      </div>
+ 
+  
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Define puzzle solution (in a real game, this might come from a database or be more complex)
+const solution = [
+  ['red', 'blue', 'green', 'yellow'],
+  // Add more rows here to match the puzzle-container structure
+];
+
+// Shuffle function for mixing up colors (optional)
+function shuffleColors() {
+  const puzzlePieces = $('.puzzle-piece');
+  puzzlePieces.each(function () {
+    const colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    $(this).css('background-color', randomColor);
+    $(this).attr('data-color', randomColor);
+  });
+}
+
+// Check solution function
+function checkSolution() {
+  const puzzlePieces = $('.puzzle-piece');
+  const playerSolution = [];
+
+  puzzlePieces.each(function () {
+    const row = parseInt($(this).attr('data-row')) - 1;
+    const col = parseInt($(this).attr('data-col')) - 1;
+    const color = $(this).attr('data-color');
+    if (!playerSolution[row]) {
+      playerSolution[row] = [];
+    }
+    playerSolution[row][col] = color;
+  });
+
+  // Compare the player's solution to the actual solution
+  const isCorrect = JSON.stringify(playerSolution) === JSON.stringify(solution);
+
+  if (isCorrect) {
+    $('#result').text('Congratulations! Puzzle solved!');
+    // Additional actions when the puzzle is solved (e.g., unlock a color)
+  } else {
+    $('#result').text('Oops! Not quite there. Try again!');
+  }
+}
+
+// Event listeners
+$(document).ready(function () {
+  shuffleColors(); // Initial shuffle of puzzle colors
+
+  $('#checkButton').on('click', function () {
+    checkSolution();
+  });
+
+  var keys = [];
+  function set_keys(){
+    keys = [];
+    $('.match_key_solution .puzzle-piece').each(function(){
+        console.log($(this).data('color'));
+        keys.push($(this).attr('data-color'));
+    });
+    console.log(keys);
+  }
+  set_keys();
+
+  var x = 0;
+  $('.puzzle-container .puzzle-piece').click(function(){
+    
+
+    var color = $(this).attr('data-color');
+    console.log(x);
+    if(color == keys[x]){
+        console.log(keys[x]);
+        $('.match_key_solution .puzzle-piece[data-order="'+x+'"]').css('border','5px green solid');
+        // if(x == 4){
+        //     $('.match_key_solution .puzzle-piece').css('border','none');
+        //     x = 0;
+        // }
+        x++;
+
+    }
+
+    var colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    var randomColor = colors[Math.floor(Math.random() * colors.length)];
+    $(this).css('background-color', randomColor);
+    $(this).attr('data-color', randomColor);
+  });
+
+  $('.new_board').click(function(){
+    new_board();
+  });
+
+  function new_board() {
+  var puzzlePieces = $('.match_key_solution .puzzle-piece');
+  puzzlePieces.each(function () {
+    var colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    var randomColor = colors[Math.floor(Math.random() * colors.length)];
+    $(this).css('background-color', randomColor);
+    $(this).attr('data-color', randomColor);
+  });
+  $('.match_key_solution .puzzle-piece').css('border','none');
+  x = 0;
+  set_keys();
+}
+
+
+});
+
+  </script>
+</body>
+</html>
