@@ -109,7 +109,7 @@ body{
   <script>
     // Define puzzle solution (in a real game, this might come from a database or be more complex)
 const solution = [
-  ['red', 'blue', 'green', 'yellow'],
+  ['#dc3545', '#0d6efd', '#198754', '#ffc107'],
   // Add more rows here to match the puzzle-container structure
 ];
 
@@ -117,7 +117,7 @@ const solution = [
 function shuffleColors() {
   const puzzlePieces = $('.puzzle-piece');
   puzzlePieces.each(function () {
-    const colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    const colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     $(this).css('background-color', randomColor);
     $(this).attr('data-color', randomColor);
@@ -186,7 +186,7 @@ $(document).ready(function () {
 
     }
 
-    var colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    var colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
     $(this).css('background-color', randomColor);
     $(this).attr('data-color', randomColor);
@@ -199,7 +199,7 @@ $(document).ready(function () {
   function new_board() {
   var puzzlePieces = $('.match_key_solution .puzzle-piece');
   puzzlePieces.each(function () {
-    var colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    var colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
     $(this).css('background-color', randomColor);
     $(this).attr('data-color', randomColor);
