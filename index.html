@@ -116,7 +116,9 @@ const solution = [
 
 // Shuffle function for mixing up colors (optional)
 function shuffleColors() {
+
   const puzzlePieces = $('.puzzle-piece');
+
   puzzlePieces.each(function () {
     const colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -124,10 +126,20 @@ function shuffleColors() {
     $(this).attr('data-color', randomColor);
   });
 }
+function shuffleColors2() {
 
+ const puzzlePieces = $('.puzzle-container .puzzle-piece');
+
+  puzzlePieces.each(function () {
+    const colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    $(this).css('background-color', randomColor);
+    $(this).attr('data-color', randomColor);
+  });
+}
 // Check solution function
 function checkSolution() {
-  const puzzlePieces = $('.puzzle-piece');
+  const puzzlePieces = $('.puzzle-container .puzzle-piece');
   const playerSolution = [];
 
   puzzlePieces.each(function () {
@@ -139,6 +151,9 @@ function checkSolution() {
     }
     playerSolution[row][col] = color;
   });
+function checkSolution2() {
+shuffleColors();
+}
 
   // Compare the player's solution to the actual solution
   const isCorrect = JSON.stringify(playerSolution) === JSON.stringify(solution);
@@ -156,7 +171,7 @@ $(document).ready(function () {
   shuffleColors(); // Initial shuffle of puzzle colors
 
   $('#checkButton').on('click', function () {
-    shuffleColors();
+    shuffleColors2();
   });
 
   var keys = [];
