@@ -56,7 +56,7 @@ body{
             Pixel Puzzler
         </div>
         <div class="card-body">
-          <h5 class="card-title"></h5>
+          <h5 class="card-title">Score: <span id="score">0</span></h5>
           <p class="card-text">
             <div class="game-container">
                 <div class="puzzle-row match_key_solution">
@@ -110,7 +110,7 @@ body{
   <script>
     // Define puzzle solution (in a real game, this might come from a database or be more complex)
 const solution = [
-  ['#dc3545', '#0d6efd', '#198754', '#ffc107'],
+  ['#dc3545', '#198754', '#0d6efd', '#ffc107'],
   // Add more rows here to match the puzzle-container structure
 ];
 
@@ -211,7 +211,7 @@ $(document).ready(function () {
   $('.new_board').click(function(){
     new_board();
   });
-
+var score =0;
   function new_board() {
   var puzzlePieces = $('.match_key_solution .puzzle-piece');
   puzzlePieces.each(function () {
@@ -223,6 +223,8 @@ $(document).ready(function () {
   $('.match_key_solution .puzzle-piece').css('border','none');
   x = 0;
   set_keys();
+score++;
+$('#score').text(score);
 }
 
 
