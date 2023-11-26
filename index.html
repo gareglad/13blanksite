@@ -56,7 +56,7 @@ body{
             Pixel Puzzler
         </div>
         <div class="card-body">
-          <h5 class="card-title">Score: <span id="score">0</span></h5>
+          <h5 class="card-title">Score: <span id="score">0</span> High Score: <span id="highscore2">0</span></h5>
           <p class="card-text">
             <div class="game-container">
                 <div class="puzzle-row match_key_solution">
@@ -212,6 +212,9 @@ $(document).ready(function () {
     new_board();
   });
 var score =0;
+var highscore = localStorage.getItem('highscore')||0;
+console.log(highscore);
+$('#highscore2').text(highscore);
   function new_board() {
   var puzzlePieces = $('.match_key_solution .puzzle-piece');
   puzzlePieces.each(function () {
@@ -225,6 +228,13 @@ var score =0;
   set_keys();
 score++;
 $('#score').text(score);
+console.log(score);
+
+if(score > highscore){
+localStorage.setItem('highscore', score);
+$('#highscore2').text(score);
+}
+
 }
 
 
