@@ -28,8 +28,9 @@ body{
 .puzzle-piece {
   width: 50px;
   height: 50px;
-  border: 1px solid #000;
+  border: 1px solid black;
   display: inline;
+  margin-bottom: 3px;
 }
 .puzzle-row {
     display: grid;
@@ -55,7 +56,7 @@ body{
             Pixel Puzzler
         </div>
         <div class="card-body">
-          <h5 class="card-title"></h5>
+          <h5 class="card-title">Score: <span id="score">0</span> High Score: <span id="highscore2">0</span></h5>
           <p class="card-text">
             <div class="game-container">
                 <div class="puzzle-row match_key_solution">
@@ -95,7 +96,7 @@ body{
                 
               </div>
           </p>
-          <button id="checkButton"  class="btn btn-primary">Check Solution</button>
+          <button id="checkButton"  class="btn btn-primary">Scrammble</button>
                 <button class="new_board btn btn-primary">New Board</button>
                 <div id="result"></div>
           <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
@@ -109,24 +110,36 @@ body{
   <script>
     // Define puzzle solution (in a real game, this might come from a database or be more complex)
 const solution = [
-  ['red', 'blue', 'green', 'yellow'],
+  ['#dc3545', '#198754', '#0d6efd', '#ffc107'],
   // Add more rows here to match the puzzle-container structure
 ];
 
 // Shuffle function for mixing up colors (optional)
 function shuffleColors() {
+
   const puzzlePieces = $('.puzzle-piece');
+
   puzzlePieces.each(function () {
-    const colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    const colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     $(this).css('background-color', randomColor);
     $(this).attr('data-color', randomColor);
   });
 }
+function shuffleColors2() {
 
+ const puzzlePieces = $('.puzzle-container .puzzle-piece');
+
+  puzzlePieces.each(function () {
+    const colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    $(this).css('background-color', randomColor);
+    $(this).attr('data-color', randomColor);
+  });
+}
 // Check solution function
 function checkSolution() {
-  const puzzlePieces = $('.puzzle-piece');
+  const puzzlePieces = $('.puzzle-container .puzzle-piece');
   const playerSolution = [];
 
   puzzlePieces.each(function () {
@@ -138,6 +151,9 @@ function checkSolution() {
     }
     playerSolution[row][col] = color;
   });
+function checkSolution2() {
+shuffleColors();
+}
 
   // Compare the player's solution to the actual solution
   const isCorrect = JSON.stringify(playerSolution) === JSON.stringify(solution);
@@ -155,7 +171,7 @@ $(document).ready(function () {
   shuffleColors(); // Initial shuffle of puzzle colors
 
   $('#checkButton').on('click', function () {
-    checkSolution();
+    shuffleColors2();
   });
 
   var keys = [];
@@ -177,7 +193,7 @@ $(document).ready(function () {
     console.log(x);
     if(color == keys[x]){
         console.log(keys[x]);
-        $('.match_key_solution .puzzle-piece[data-order="'+x+'"]').css('border','5px green solid');
+        $('.match_key_solution .puzzle-piece[data-order="'+x+'"]').css('border','5px black solid');
         // if(x == 4){
         //     $('.match_key_solution .puzzle-piece').css('border','none');
         //     x = 0;
@@ -186,7 +202,7 @@ $(document).ready(function () {
 
     }
 
-    var colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    var colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
     $(this).css('background-color', randomColor);
     $(this).attr('data-color', randomColor);
@@ -195,11 +211,14 @@ $(document).ready(function () {
   $('.new_board').click(function(){
     new_board();
   });
-
+var score =0;
+var highscore = localStorage.getItem('highscore')||0;
+console.log(highscore);
+$('#highscore2').text(highscore);
   function new_board() {
   var puzzlePieces = $('.match_key_solution .puzzle-piece');
   puzzlePieces.each(function () {
-    var colors = ['red', 'blue', 'green', 'yellow']; // Add more colors if needed
+    var colors =   ['#dc3545', '#0d6efd', '#198754', '#ffc107']; // Add more colors if needed
     var randomColor = colors[Math.floor(Math.random() * colors.length)];
     $(this).css('background-color', randomColor);
     $(this).attr('data-color', randomColor);
@@ -207,6 +226,15 @@ $(document).ready(function () {
   $('.match_key_solution .puzzle-piece').css('border','none');
   x = 0;
   set_keys();
+score++;
+$('#score').text(score);
+console.log(score);
+
+if(score > highscore){
+localStorage.setItem('highscore', score);
+$('#highscore2').text(score);
+}
+
 }
 
 
